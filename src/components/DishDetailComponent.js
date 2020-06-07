@@ -28,7 +28,7 @@ class DishDetail extends Component{
             const COMMENTS=dish.comments.map((COMMENT)=>{
                 return(
                     <ul className="list-unstyled">
-                        <li key={COMMENT.id}>{COMMENT.comment}<br/>by {[COMMENT.author,COMMENT.date.slice(0,10)].join(' on ')}</li>
+                        <li key={COMMENT.id}>{COMMENT.comment}<br/>by {[COMMENT.author,new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(COMMENT.date)))].join(' on ')}</li>
                     </ul>
                 );
             });
@@ -47,13 +47,15 @@ class DishDetail extends Component{
     }
     render(){
         return(
-            <div className="row">
-                  <div  className="col-12 col-md-5 m-1">
-                    {this.renderDish(this.props.selectedDish)}
-                  </div>
-                  <div  className="col-12 col-md-5 m-1">
-                    {this.renderComments(this.props.selectedDish)}
-                  </div>
+            <div className="container">
+                <div className="row">
+                    <div  className="col-12 col-md-5 m-1">
+                        {this.renderDish(this.props.dish)}
+                    </div>
+                    <div  className="col-12 col-md-5 m-1">
+                        {this.renderComments(this.props.dish)}
+                    </div>
+                </div>
             </div>
         );
     }
