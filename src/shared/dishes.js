@@ -7,7 +7,7 @@ export const DISHES =
         category: 'mains',
         label:'Hot',
         price:'4.99',
-        featured: true,
+        featured: false,
         description:'A unique combination of Indian Uthappam (pancake) and Italian pizza, topped with Cerignola olives, ripe vine cherry tomatoes, Vidalia onion, Guntur chillies and Buffalo Paneer.'                    
         },
         {
@@ -17,7 +17,7 @@ export const DISHES =
         category: 'appetizer',
         label:'',
         price:'1.99',
-        featured: false,
+        featured: true,
         description:'Deep fried Zucchini coated with mildly spiced Chickpea flour batter accompanied with a sweet-tangy tamarind sauce'
         },
         {
