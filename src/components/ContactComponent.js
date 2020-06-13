@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Breadcrumb, BreadcrumbItem, Form, Button, Input, FormGroup, Col, Label } from 'reactstrap';
+import { Breadcrumb, BreadcrumbItem, Form, Button, Input, FormGroup, Col, Label, FormFeedback } from 'reactstrap';
+import { checkServerIdentity } from 'tls';
 
 class Contact extends Component {
     constructor(props){
@@ -14,17 +15,35 @@ class Contact extends Component {
             agree:false,
             contactType:'Tel.',
             message:'',
+            touched:{
+                firstname:false,
+                lastname:false,
+                telnum:false,
+                email:false,
+            }
         }
         this.handleInputChange=this.handleInputChange.bind(this);
         this.handleSubmit=this.handleSubmit.bind(this);
+        this.handleBlur=this.handleBlur.bind(this);
+        // this.validate=this.validate.bind(this);
     }
 
     handleInputChange(event){
         const target=event.target;
         const value=target.type==='checkbox'? target.checked : target.value
         const name=target.name;
+        // console.log("Target: "+target);
+        // console.log({name:value});
+        // console.log(name);
+        // console.log(value);
         this.setState({
             [name]:value
+        });
+    }
+
+    handleBlur=(field)=>(evt)=>{
+        this.setState({
+            touched:{...this.state.touched, [field]:true}
         });
     }
 
@@ -33,7 +52,25 @@ class Contact extends Component {
         event.preventDefault();
     }
 
+    validate(firstname, lastname, telnum, email){
+        const errors={
+            firstname:'',
+            lastname:'',
+            telnum:'',
+            email:'',
+        };
+
+        if(this.state.touched.firstname && (firstname.length<3 || firstname.length>10)){
+            errors.firstname='Firstname should be >=3 and <=10 characters only';
+        }
+        if(this.state.touched.lastname && (lastname.length<3 || firstname.length>10)){
+            errors.lastname='Lastname should be >=3 and <=10 characters only';
+        }
+        return errors;
+    }
+
     render(){
+        const errors=this.validate(this.state.firstname, this.state.lastname, this.state.telnum, this.state.email);
         return(
             <div className="container">
 
@@ -84,14 +121,22 @@ class Contact extends Component {
                                 <Label htmlFor="firstname" md={2}>First Name</Label>
                                 <Col md={10}>
                                     <Input type="text" id="firstname" placeholder="First Name" name="firstname" value={this.state.firstname}
-                                           onChange={this.handleInputChange}></Input>
+                                           onChange={this.handleInputChange}
+                                           valid={errors.firstname === ''}
+                                           invalid={errors.firstname !== ''}
+                                           onBlur={this.handleBlur('firstname')}></Input>
+                                     <FormFeedback>{errors.firstname}</FormFeedback>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
                                 <Label htmlFor="lastname" md={2}>Last Name</Label>
                                 <Col md={10}>
                                     <Input type="text" id="lastname" placeholder="Last Name" name="lastname" value={this.state.lastname}
-                                           onChange={this.handleInputChange}></Input>
+                                           onChange={this.handleInputChange}
+                                           valid={errors.lastname === ''}
+                                           invalid={errors.lastname !== ''}
+                                           onBlur={this.handleBlur('lastname')}></Input>
+                                    <FormFeedback>{errors.lastname}</FormFeedback>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
@@ -146,3 +191,4 @@ class Contact extends Component {
 }
 
 export default Contact;
+
