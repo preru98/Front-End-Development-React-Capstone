@@ -1,6 +1,7 @@
-import React from 'react';
-import { Card, CardImg, CardImgOverlay, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import React, { Component } from 'react';
+import { Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbItem, Button, Modal, ModalBody, ModalHeader, Label, Row } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { LocalForm, Control, Errors} from 'react-redux-form';
 
 
     function RenderDish({dish}) {
@@ -34,6 +35,7 @@ import { Link } from 'react-router-dom';
                 <div>
                     <h4>Comments</h4>
                     <div>{COMMENTS}</div>
+                    <CommentForm/>
                 </div>
             );
         }
@@ -65,6 +67,84 @@ import { Link } from 'react-router-dom';
                 </div>
             </div>
         );
+    }
+    const maxLength = (len) => (val) => !(val) || (val.length <= len);
+    const minLength = (len) => (val) => val && (val.length >= len);
+    class CommentForm extends Component{
+        constructor(props){
+            super(props);
+            this.state={
+                isModalOpen:false,
+            }
+        }
+
+        toggleModal=()=>{
+            this.setState({
+                isModalOpen: !this.state.isModalOpen
+            });
+        }
+
+        handleSubmit=(values)=>{
+            this.setState({
+                isModalOpen: false
+            });
+            alert(JSON.stringify(values));
+        }
+
+        render(){
+            return(
+                <React.Fragment>
+                    <Button color="primary" onClick={this.toggleModal}>Submit Comment</Button>
+                    <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
+                        <ModalHeader toggle={this.toggleModal}>
+                            SUBMIT FEEDBACK!
+                        </ModalHeader>
+                        <ModalBody>
+                            <div className="container">
+                                <LocalForm onSubmit={this.handleSubmit}>
+                                    <Row className="form-group">
+                                        <Label htmlFor="rating">Rating</Label>
+                                        <Control.select model=".rating" id="rating" placeholder="Rating" name="rating" className="form-control">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                            <option>5</option>
+                                        </Control.select>
+                                    </Row>
+                                    <Row className="form-group">
+                                        <Label htmlFor="author">Name</Label>
+                                        <Control.text model=".author" id="name" placeholder="Author" name="author" 
+                                                        className="form-control" validators={{
+                                                          minLength:minLength(3),
+                                                          maxLength:maxLength(15)
+                                                        }}
+                                        />
+                                        <Errors className="text-danger"
+                                               show="touched"
+                                               model=".author"
+                                               messages={{
+                                                    minLength : "Name must contain atleast three characters",
+                                                    maxLength : "Name must not contain more than 15 chracters"  
+                                               }}
+                                        />
+                                                    
+                                    </Row>
+
+                                    <Row className="form-group">
+                                        <Label htmlFor="comment">Comment</Label>
+                                        <Control.textarea rows="6" model=".comment" id="comment" placeholder="Comment" name="comment" className="form-control"/>
+                                    </Row>
+                                    <Row className="form-group">
+                                        <Button type="submit" color="primary">Submit</Button>
+                                    </Row>
+                                </LocalForm>
+                            </div>
+                        </ModalBody>
+                    </Modal>
+                </React.Fragment>
+            );
+        }
     }
 
 export default DishDetail;
