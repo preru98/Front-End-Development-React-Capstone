@@ -1,9 +1,21 @@
 import React from 'react';
 import {Card, CardBody, CardImg, CardTitle, CardSubtitle, CardText} from 'reactstrap';
+import { Loading } from './LoadComponent';
 
-function RenderCard({item}){
+function RenderCard({item, isLoading, errMess}){
     console.log(item);
-    console.log(item.image);
+    // console.log(item.image);
+    if(isLoading) {
+        return(
+           <Loading />
+        );
+    }
+    else if (errMess) {
+        return(
+            <h4>{errMess}</h4>
+        );
+    }
+    else 
     return(
         <Card>
             <CardImg src={item.image} alt={item.name}></CardImg>
@@ -23,7 +35,9 @@ function Home (props){
             <div className="row align-items-start">
                 
                 <div className="col-12 col-md m-1">
-                    <RenderCard item={props.dish}/>
+                    <RenderCard item={props.dish}
+                                isLoading={props.dishesLoading}
+                                errMess={props.dishesErrMess}/>
                 </div>
                 <div className="col-12 col-md m-1">
                     <RenderCard item={props.promotion}/>
