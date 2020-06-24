@@ -4,18 +4,24 @@ import { Link } from 'react-router-dom';
 import { LocalForm, Control, Errors} from 'react-redux-form';
 import { Loading } from './LoadComponent';
 import { baseUrl } from '../shared/baseUrl';
+import { FadeTransform, Fade, Stagger } from 'react-animation-components';
 
 
     function RenderDish({dish}) {
         if (dish != null){
             return(
-                <Card>
-                    <CardImg top src={baseUrl + dish.image} alt={dish.name} />
-                    <CardBody>
-                      <CardTitle>{dish.name}</CardTitle>
-                      <CardText>{dish.description}</CardText>
-                    </CardBody>
-                </Card>
+                <FadeTransform in
+                    transformProps={{
+                    exitTransform : 'scale(0.5) translateY(-50%)'
+                }}>
+                    <Card>
+                        <CardImg top src={baseUrl + dish.image} alt={dish.name} />
+                        <CardBody>
+                        <CardTitle>{dish.name}</CardTitle>
+                        <CardText>{dish.description}</CardText>
+                        </CardBody>
+                    </Card>
+                </FadeTransform>
             );
         }
         else{
@@ -29,16 +35,20 @@ import { baseUrl } from '../shared/baseUrl';
             const COMMENTS=comments.map((COMMENT)=>{
                 return(
                     <ul className="list-unstyled">
-                        <li key={COMMENT.id}>{COMMENT.comment}<br/>by {[COMMENT.author,new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(COMMENT.date)))].join(' on ')}</li>
+                        <Fade in>
+                            <li key={COMMENT.id}>{COMMENT.comment}<br/>by {[COMMENT.author,new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(COMMENT.date)))].join(' on ')}</li>
+                        </Fade>
                     </ul>
                 );
             });
             return(
-                <div>
-                    <h4>Comments</h4>
-                    <div>{COMMENTS}</div>
-                    <CommentForm dishId={dishId} postComment={postComment}/>
-                </div>
+                    <div>
+                        <h4>Comments</h4>
+                        <Stagger in>
+                            <div>{COMMENTS}</div>
+                        </Stagger>
+                        <CommentForm dishId={dishId} postComment={postComment}/>
+                    </div>
             );
         }
         else{
