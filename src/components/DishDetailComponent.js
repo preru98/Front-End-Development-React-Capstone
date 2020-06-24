@@ -24,7 +24,7 @@ import { baseUrl } from '../shared/baseUrl';
             );
         }
     }
-    function RenderComments({comments, dishId, addComment}) {
+    function RenderComments({comments, dishId, postComment}) {
         if (comments!=null){
             const COMMENTS=comments.map((COMMENT)=>{
                 return(
@@ -37,7 +37,7 @@ import { baseUrl } from '../shared/baseUrl';
                 <div>
                     <h4>Comments</h4>
                     <div>{COMMENTS}</div>
-                    <CommentForm dishId={dishId} addComment={addComment}/>
+                    <CommentForm dishId={dishId} postComment={postComment}/>
                 </div>
             );
         }
@@ -86,7 +86,7 @@ import { baseUrl } from '../shared/baseUrl';
                         </div>
                         <div className="col-12 col-md-5 m-1">
                             <RenderComments comments={props.comment}
-                                            addComment={props.addComment}
+                                            postComment={props.postComment}
                                             dishId={props.dish.id}/>
                         </div>
                     </div>
@@ -114,7 +114,7 @@ import { baseUrl } from '../shared/baseUrl';
             this.setState({
                 isModalOpen: false
             });
-            this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
+            this.props.postComment(this.props.dishId, values.rating, values.author, values.comment);
         }
 
         render(){
