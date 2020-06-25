@@ -1,4 +1,5 @@
 export const ADD_COMMENT="ADD_COMMENT";
+export const POST_FEEDBACK="POST_FEEDBACK";
 
 export const ADD_DISHES="ADD_DISHES";
 export const DISHES_LOADING="DISHES_LOADING";

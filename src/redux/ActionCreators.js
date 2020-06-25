@@ -1,6 +1,53 @@
 import * as ActionTypes from './ActionTypes';
 import { baseUrl } from '../shared/baseUrl';
 
+export const postFeedback=(firstname, lastname, telnum, email, agree, contactType, message)=>(dispatch)=>{
+    const newFeedback = {
+        firstname:firstname,
+        lastname:lastname, 
+        telnum:telnum, 
+        email:email, 
+        agree:agree, 
+        contactType:contactType, 
+        message:message, 
+    }
+
+    return fetch(baseUrl + 'feedback',{
+        method : 'POST',
+        body : JSON.stringify(newFeedback),
+        headers: {
+            'Content-Type' : 'application/json',
+        },
+        credentials : 'same-origin'
+    })
+    .then(response =>{            //if we receive response from server
+        if(response.ok){
+            return response;
+        }
+        else{
+            var error=new Error('Error : ' +response.status +' '+ response.statusText);
+            error.response=response;
+            throw error;
+        }
+    },
+    error => {
+        var errmess =new Error(error.message);
+        throw errmess;
+    })
+    .then(response => response.json())   
+    .then(response => { alert( JSON.stringify(response));})
+    .catch(error =>{
+        console.log('Post Feedback', console.log(error.message));
+        alert('Your feedback could not be posted\n' +error.message);  
+    });      
+}
+
+// export const addFeedback=(feedback)=>({
+//     type : ActionTypes.ADD_FEEDBACK,
+//     payload : feedback
+// });
+
+
 export const addComment=(comment)=>({
     type : ActionTypes.ADD_COMMENT,
     payload : comment
